@@ -1,0 +1,76 @@
+# from_input_box = wait.until(EC.element_to_be_clickable((By.CLASS_NAME,'search-from-city')))
+# from_input_box.click()
+# time.sleep(1)
+
+# input_from = wait.until(EC.element_to_be_clickable((By.CLASS_NAME,'chosen-search')))
+# search_from = input_from.find_element(By.TAG_NAME,"input")
+# search_from.send_keys("Kozhikode")
+# search_from.send_keys(Keys.ENTER)
+# time.sleep(1)
+
+
+# to_input_box = wait.until(EC.element_to_be_clickable((By.CLASS_NAME, 'search-to-city')))
+# to_input_box.click()
+# time.sleep(1)
+
+# input_to = wait.until(EC.element_to_be_clickable((By.CLASS_NAME,'chosen-search')))
+# search_to = input_to.find_element(By.TAG_NAME,"input")
+# search_to.send_keys("Kothamangalam")
+# search_to.send_keys(Keys.ENTER)
+# time.sleep(1)
+    
+# Get user input for places
+# from_city = input("Enter From City: ").strip()
+# to_city = input("Enter To City: ").strip()
+
+
+# from_input_box = wait.until(EC.element_to_be_clickable((By.CLASS_NAME, 'search-from-city')))
+# from_input_box.click()
+# input_from = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '.search-from-city .chosen-search input')))
+# input_from.send_keys(from_city)
+# wait.until(EC.element_to_be_clickable((By.XPATH, f'//li[contains(., "{from_city}")]'))).click()
+
+# # Select To City
+# to_input_box = wait.until(EC.element_to_be_clickable((By.CLASS_NAME, 'search-to-city')))
+# to_input_box.click()
+# input_to = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '.search-to-city .chosen-search input')))
+# input_to.send_keys(to_city)
+# wait.until(EC.element_to_be_clickable((By.XPATH, f'//li[contains(., "{to_city}")]'))).click()
+
+# Get and select date from user (format: DD-MM-YYYY)
+travel_date = input("Enter Date (DD-MM-YYYY): ").strip()
+
+# Parse and format the date
+# from datetime import datetime
+# date_obj = datetime.strptime(travel_date, "%d-%m-%Y")
+# formatted_date = date_obj.strftime("%a, %d-%b-%Y") 
+# # Set date using JavaScript (direct input)
+# driver.execute_script(
+#     f"document.getElementById('departDate').value = '{formatted_date}';"
+
+
+
+# from_input_box = wait.until(EC.element_to_be_clickable((By.CLASS_NAME,'search-from-city')))
+# from_input_box.click()
+# input_from = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '.search-from-city .chosen-search input')))
+# input_from.send_keys(from_city)
+# wait.until(EC.element_to_be_clickable((By.XPATH,f'//li[contains(., "{to_city}")]'))).click()
+
+# from_input_box = wait.until(EC.element_to_be_clickable((By.CLASS_NAME, 'search-from-city')))
+# from_input_box.click()
+# input_from = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '.search-from-city .chosen-search input')))
+# input_from.send_keys(from_city)
+# wait.until(EC.element_to_be_clickable((By.XPATH, f'//li[contains(., "{from_city}")]'))).click()
+
+# to_input_box = wait.until(EC.element_to_be_clickable((By.CLASS_NAME, 'search-to-city')))
+# to_input_box.click()
+# input_to = wait.until(EC.element_to_be_clickable((By.CSS_SELECTOR, '.search-to-city .chosen-search input')))
+# input_to.send_keys(to_city)
+# wait.until(EC.element_to_be_clickable((By.XPATH, f'//li[contains(., "{to_city}")]'))).click()
+
+# travel_date = input('Enter Date (dd-mm-yyyy): ').strip()
+
+# input_date = datetime.strptime(travel_date, "%d-%m-%Y")
+# format_date = input_date.strftime("%a, %d-%b-%Y")
+
+# driver.execute_script(f"document.getElementById('departDate').value' = '{format_date}';")

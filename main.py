@@ -1,54 +1,76 @@
-from browser_setup import setup_browser, close_ad, teardown_browser
-from journey_details import enter_journey_details, proceed_to_details
-from bus_selection import display_available_buses, select_bus_by_time
-from seat_selection import select_seat, available_seats
-from passenger_details import enter_passenger_details
-from payment_processing import enter_payee_details, proceed_to_payment
-from points_selection import points
-from payment_selection import click_pay_now_button
+# from browser_setup import setup_browser, close_ad, teardown_browser
+# from journey_details import enter_journey_details, proceed_to_details
+# from bus_selection import display_available_buses, select_bus_by_time
+# from seat_selection import select_seat, available_seats
+# from passenger_details import enter_passenger_details
+# from payment_processing import enter_payee_details, proceed_to_payment
+# from points_selection import points
+# from payment_selection import click_pay_now_button
+# from timeout import monitor_seat_availability
 
-def main():
-    try:
-        # Initialize browser
-        driver, wait = setup_browser()
-        close_ad(driver, wait)
+# def main():
+#     try:
+#         # Initialize browser
+#         driver, wait = setup_browser()
+#         close_ad(driver, wait)
 
-        # Set journey details
-        enter_journey_details(driver, wait,
-            from_city="kozhikode",
-            to_city="Kothamangalam",
-            travel_date="01-04-2025"
-        )
+#         # Set journey details
+#         enter_journey_details(driver, wait,
+#             from_city="kozhikode",
+#             to_city="Kothamangalam",
+#             travel_date="01-04-2025"
+#         )
 
-        # Bus selection
-        buses = display_available_buses(driver, wait)
-        select_bus_by_time(driver, wait, buses, "22:15")
+#         # Bus selection
+#         buses = display_available_buses(driver, wait)
+#         select_bus_by_time(driver, wait, buses, "22:15")
 
-        # Seat selection
-        available_seat = []
-        available_seats(driver,available_seat)
-        select_seat(driver, wait, "17",available_seat)
-        points(wait,driver)
-        # Passenger details
-        enter_passenger_details(driver, wait,
-            name="John Doe",
-            age="30",
-            gender="Male"
-        )
-        proceed_to_details(driver,wait)
+#         # Seat selection
+#         available_seat = []
+#         available_seats(driver,available_seat)
+#         select_seat(driver, wait, "17",available_seat)
+#         points(wait,driver)
+#         # Passenger details
+#         enter_passenger_details(driver, wait,
+#             name="John Doe",
+#             age="30",
+#             gender="Male"
+#         )
+#         proceed_to_details(driver,wait)
 
-        # Payment process
-        enter_payee_details(driver, wait,
-            mobile="9876543210",
-            email="johndoe@example.com"
-        )
-        proceed_to_payment(driver, wait)
+#         # Payment process
+#         enter_payee_details(driver, wait,
+#             mobile="9876543210",
+#             email="johndoe@example.com"
+#         )
+#         proceed_to_payment(driver, wait)
 
-        click_pay_now_button(driver,wait)
+#         click_pay_now_button(driver,wait)
 
-    finally:
-        input("Press Enter to close the browser...")
-        teardown_browser(driver)
 
-if __name__ == "__main__":
-    main()
+#         monitor_seat_availability('17')
+
+#     finally:
+#         input("Press Enter to close the browser...")
+#         teardown_browser(driver)
+
+# if __name__ == "__main__":
+#     main()
+from continous_booking import continuous_booking_
+
+details = {
+    'INTERVAL':60,
+    'COOLDOWN_ERROR': 10,
+    'MAX_ATTEMPTS' :100,
+    'seat_number' :'22',
+    'from': 'Kozhikode',
+    'to': 'Kothamangalam',
+    'date':'01-04-2025',
+    'phone':'9876543210',
+    'email':'name@gmail.com',
+    'name': 'Jhon F',
+    'gender':'Male',
+    'bus_time':'22:15'
+}
+
+continuous_booking_(details)

@@ -3,7 +3,8 @@ from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait
 import time
 
-def available_seats(driver,seat_data):
+def  available_seats(driver,wait):
+    seat_data = []
     try:
         WebDriverWait(driver,15).until(EC.presence_of_element_located((By.CSS_SELECTOR,'.seatlook')))
     except Exception as e:
@@ -12,29 +13,32 @@ def available_seats(driver,seat_data):
     seats = driver.find_elements(By.CSS_SELECTOR,'.seatlook')
 
     print(len(seats),'length')
-    
-    for seat in seats:
-        try:
-            is_available = "cursor: pointer" in seat.get_attribute("style")
-            
-            # Get seat details using JavaScript to access hidden tooltip
-            js_code = """
-            return arguments[0].querySelector('.farepopup').innerText;
-            """
-            tooltip_text = driver.execute_script(js_code, seat)
-            
-            seat_number = tooltip_text.split("|")[0].split("Seat: ")[1].strip()
-            fare = tooltip_text.split("Rs. ")[1].strip()
-            
-            seat_data.append({
-                'element': seat,
-                'number': seat_number,
-                'fare': fare,
-                'available': is_available
-            })
-        except Exception as e:
-            print(f"Error processing seat: {str(e)}")
-            continue
+    try:
+        for index, seat in enumerate(seats,1):
+            try:
+                is_available = "cursor: pointer" in seat.get_attribute("style")
+                
+                # Get seat details using JavaScript to access hidden tooltip
+                js_code = """
+                return arguments[0].querySelector('.farepopup').innerText;
+                """
+                tooltip_text = driver.execute_script(js_code, seat)
+                
+                seat_number = tooltip_text.split("|")[0].split("Seat: ")[1].strip()
+                fare = tooltip_text.split("Rs. ")[1].strip()
+                
+                seat_data.append({
+                    'index':index,
+                    'element': seat,
+                    'number': seat_number,
+                    'fare': fare,
+                    'available': is_available
+                })
+            except Exception as e:
+                print(f"Error processing seat: {str(e)}")
+                continue
+    except Exception as e:
+        print('error loading seats',str(e))
 
     # Display available seats
     print("\nAvailable Seats:")
@@ -47,6 +51,7 @@ def available_seats(driver,seat_data):
                 f"₹{seat['fare']}", 
                 'Available'
             ))
+    return seat_data
 
 def select_seat(driver, wait, selected_seat,seat_data):
     while True:
@@ -58,10 +63,11 @@ def select_seat(driver, wait, selected_seat,seat_data):
             
         # Find matching seat
         selected = next((s for s in seat_data if s['number'] == selected_seat and s['available']), None)
-        
+        print(selected)
         if not selected:
             print("Invalid seat number or seat not available!")
             driver.quit()
+            return False
             exit()
             continue
             
@@ -84,4 +90,5 @@ def select_seat(driver, wait, selected_seat,seat_data):
         except Exception as e:
             print(f"Error selecting seat: {str(e)}")
             continue
+    return True
 
