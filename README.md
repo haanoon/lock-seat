@@ -1,1 +1,1 @@
-just to lock a seat without booking it
+just to lock a seat for future bookin
