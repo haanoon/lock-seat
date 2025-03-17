@@ -23,6 +23,8 @@ def enter_journey_details(driver, wait, from_city, to_city, travel_date):
 
     # Initiate search
     wait.until(EC.element_to_be_clickable((By.ID,'submitSearch'))).click()
+
+    return driver.current_url
 def proceed_to_details(driver, wait):
     try:
         # Locate and click the "PROCEED TO PAYEE DETAILS" button

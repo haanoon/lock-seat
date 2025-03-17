@@ -9,6 +9,7 @@ from passenger_details import enter_passenger_details
 from payment_processing import enter_payee_details, proceed_to_payment
 from points_selection import points
 from payment_selection import click_pay_now_button, proceed_to_next_step
+from timeout import monitor_seat_availability
 
 def booking_attempt(driver, wait, details):
     """Perform a complete booking cycle"""
@@ -20,7 +21,7 @@ def booking_attempt(driver, wait, details):
         close_ad(driver, wait)
 
         # Set journey details
-        enter_journey_details(driver, wait,
+        url = enter_journey_details(driver, wait,
             from_city=details['from'],
             to_city=details['to'],
             travel_date=details['date']
@@ -62,7 +63,23 @@ def booking_attempt(driver, wait, details):
     except Exception as e:
         print(f"Unexpected error: {str(e)}")
         return False
-    
+def load_page(driver,wait,details):
+    SEAT_NUMBER = details['seat_number']
+    try:
+        # Initialize fresh session
+        driver.delete_all_cookies()
+        driver.get("https://onlineksrtcswift.com/")
+        close_ad(driver, wait)
+
+        # Set journey details
+        url = enter_journey_details(driver, wait,
+            from_city=details['from'],
+            to_city=details['to'],
+            travel_date=details['date']
+        )
+    except Exception as e:
+        print(e)
+    return url
 def continuous_booking_(details):
     """Main control loop for continuous booking"""
 
@@ -70,10 +87,7 @@ def continuous_booking_(details):
     COOLDOWN_NORMAL = details['INTERVAL']
     SEAT_NUMBER = details['seat_number']
     COOLDOWN_ERROR = details['COOLDOWN_ERROR']
-
-
-
-
+    
     attempt_count = 0
     success_count = 0
     
@@ -83,36 +97,44 @@ def continuous_booking_(details):
         
         try:
             print(f"\nAttempt #{attempt_count} [{datetime.now().strftime('%H:%M:%S')}]")
+
+            url = load_page(driver, wait,details)
+
+            if monitor_seat_availability(SEAT_NUMBER,url):
+                booking_attempt(driver, wait, details)
             
-            if booking_attempt(driver, wait, details):
-                success_count += 1
-                print(f"Successfully locked seat! (Total locks: {success_count})")
+            # if booking_attempt(driver, wait, details):
+            #     print('true',driver.current_url)
+            #     success_count += 1
+            #     print(f"Successfully locked seat! (Total locks: {success_count})")
                 
-                # Monitor current booking while waiting
-                start_lock = datetime.now()
-                while (datetime.now() - start_lock).total_seconds() < 560:  # 9 minutes
-                    try:
-                        # Quick availability check
-                        driver.execute_script("window.open('');")
-                        driver.switch_to.window(driver.window_handles[1])
-                        driver.get("https://onlineksrtcswift.com/")
+            #     # Monitor current booking while waiting
+            #     start_lock = datetime.now()
+            #     while (datetime.now() - start_lock).total_seconds() < 560:  # 9 minutes
+            #         try:
+            #             # Quick availability check
+            #             driver.execute_script("window.open('');")
+            #             driver.switch_to.window(driver.window_handles[1])
+            #             driver.get("https://onlineksrtcswift.com/")
                         
-                        if check_seat_availability(driver, wait, details):
-                            print("Seat became available again! Restarting cycle...")
-                            driver.close()
-                            driver.switch_to.window(driver.window_handles[0])
-                            break
+            #             if check_seat_availability(driver, wait, details):
+            #                 print("Seat became available again! Restarting cycle...")
+            #                 driver.close()
+            #                 driver.switch_to.window(driver.window_handles[0])
+            #                 break
                             
-                        driver.close()
-                        driver.switch_to.window(driver.window_handles[0])
-                        time.sleep(60)  # Check every minute
+            #             driver.close()
+            #             driver.switch_to.window(driver.window_handles[0])
+            #             time.sleep(60)  # Check every minute
                         
-                    except Exception as e:
-                        print(f"Monitoring error: {str(e)}")
-                        break
+            #         except Exception as e:
+            #             print(f"Monitoring error: {str(e)}")
+            #             break
                 
             else:
                 print("Seat not available, retrying...")
+                print('false',driver.current_url)
+                
                 time.sleep(COOLDOWN_NORMAL)
                 
         finally:
