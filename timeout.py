@@ -65,12 +65,3 @@ def monitor_seat_availability(seat_number,url):
         
     finally:
         driver.quit()
-
-# Run monitoring for seat 17
-if __name__ == "__main__":
-    print("Starting seat availability monitor...")
-    result = monitor_seat_availability("22")
-    if result:
-        print(f"Total monitoring time: {result}")
-    else:
-        print("Monitoring stopped without finding seat")
