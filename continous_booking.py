@@ -12,7 +12,7 @@ from timeout import monitor_seat_availability
 
 def booking_attempt(driver, wait, details,url):
     """Perform a complete booking cycle"""
-    SEAT_NUMBER = details['seat_number']
+    SEAT_NUMBER = details['seat_numbers']
     try:
         # Initialize fresh session
         # driver.delete_all_cookies()
@@ -40,11 +40,7 @@ def booking_attempt(driver, wait, details,url):
         # Complete booking steps
         points(wait, driver)
 
-        enter_passenger_details(driver, wait,
-            name=details['name'],
-            age=details['age'],
-            gender=details['gender']
-        )
+        enter_passenger_details(driver, wait, details['passengers'])
 
         proceed_to_payment(driver, wait)
 
@@ -75,7 +71,7 @@ def continuous_booking_(details):
 
     MAX_ATTEMPTS = details['MAX_ATTEMPTS']
     COOLDOWN_NORMAL = details['INTERVAL']
-    SEAT_NUMBER = details['seat_number']
+    SEAT_NUMBER = details['seat_numbers']
     COOLDOWN_ERROR = details['COOLDOWN_ERROR']
     
     attempt_count = 0
@@ -90,7 +86,7 @@ def continuous_booking_(details):
 
             url = load_page(driver, wait,details)
 
-            if monitor_seat_availability(SEAT_NUMBER,url):
+            if monitor_seat_availability(SEAT_NUMBER,url,details):
                 booking_attempt(driver, wait, details,url)
                 time.sleep(COOLDOWN_NORMAL)
             else:

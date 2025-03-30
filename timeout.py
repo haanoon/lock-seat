@@ -9,7 +9,7 @@ from selenium.webdriver.support import expected_conditions as EC
 from bus_selection import display_available_buses, select_bus_by_time
 from seat_selection import select_seat, available_seats
 
-def monitor_seat_availability(seat_number,url):
+def monitor_seat_availability(seat_number,url,details):
     # Setup browser
     options = webdriver.ChromeOptions()
     options.binary_location = "/usr/bin/brave-browser"
@@ -27,7 +27,7 @@ def monitor_seat_availability(seat_number,url):
                 # Load page
                 driver.get(url)
                 buses = display_available_buses(driver, wait)
-                select_bus_by_time(driver,wait,buses,'22:15')
+                select_bus_by_time(driver,wait,buses,details['bus_time'])
                 # Wait for seats to load
                 WebDriverWait(driver, 15).until(
                     EC.presence_of_element_located((By.CSS_SELECTOR, ".seatlook"))

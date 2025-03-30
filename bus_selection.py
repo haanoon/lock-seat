@@ -21,6 +21,7 @@ def display_available_buses(driver, wait):
 
 def select_bus_by_time(driver, wait, buses, selected_time):
     for bus in buses:
+        print(bus)
         time_text = bus.find_element(By.CSS_SELECTOR, ".float-left.triptimebold.darkText1").text.split(',')[0]
         if time_text == selected_time:
             bus.find_element(By.CSS_SELECTOR, '.selectbutton').click()
